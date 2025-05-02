@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "@theme/Layout";
 import ReactMarkdown from "react-markdown";
 import Link from "@docusaurus/Link";
+import styles from "./TextTranslationPage.module.css";
 
 const VIEW_TYPES = ["image", "transcription", "translation"] as const;
 
@@ -177,34 +178,30 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
   return (
     <Layout>
       <div style={{ padding: 24 }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 16,
-          }}
-        >
-          {prevPageId ? (
-            <Link to={buildPageLink(prevPageId)}>
-              <button>← Prev</button>
-            </Link>
-          ) : (
-            <button disabled>← Prev</button>
-          )}
-
-          <h2 style={{ fontWeight: "bold", fontSize: 18 }}>
-            {props.route.customData.textName} - Page {pageInt} of {pageCount}
-          </h2>
-
-          {nextPageId ? (
-            <Link to={buildPageLink(nextPageId)}>
-              <button>Next →</button>
-            </Link>
-          ) : (
-            <button disabled>Next →</button>
-          )}
+        {/* Top navigation row with title/desc in center */}
+        <div className={styles.navRow}>
+          <PrevButton prevPageId={prevPageId} buildPageLink={buildPageLink} />
+          <div
+            style={{
+              paddingLeft: 50,
+              paddingRight: 50,
+              textAlign: "center",
+              flex: 1,
+            }}
+          >
+            <h2 style={{ fontWeight: "bold", fontSize: 18 }}>
+              {props.route.customData.textName} - Page {pageInt} of {pageCount}
+            </h2>
+            <p>
+              PLEASE NOTE: This text was originally transcribed and translated
+              with LLMs, provided as a starting point. There are likely to be
+              errors. You can submit corrections with the "Suggest Corrections"
+              button in the transcription and translation views.
+            </p>
+          </div>
+          <NextButton nextPageId={nextPageId} buildPageLink={buildPageLink} />
         </div>
+        {/* Viewer panes */}
         <div style={{ display: "flex", gap: 24 }}>
           {[
             { side: "left", view: leftView, setView: setLeftView },
@@ -252,7 +249,54 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
             </div>
           ))}
         </div>
+        {/* Bottom navigation row with extra margin */}
+        <div className={`${styles.navRow} ${styles.navRowBelow}`}>
+          <PrevButton prevPageId={prevPageId} buildPageLink={buildPageLink} />
+          <div style={{ flex: 1 }} />
+          <NextButton nextPageId={nextPageId} buildPageLink={buildPageLink} />
+        </div>
+        {/* Info line about keyboard navigation */}
+        <div className={styles.infoLine}>
+          Tip: You can use the left and right arrow keys to navigate pages.
+        </div>
       </div>
     </Layout>
+  );
+}
+
+// Individual button components
+function PrevButton({ prevPageId, buildPageLink }) {
+  if (prevPageId) {
+    return (
+      <Link to={buildPageLink(prevPageId)}>
+        <button className={styles.navButton}>← Prev</button>
+      </Link>
+    );
+  }
+  return (
+    <button
+      className={`${styles.navButton} ${styles.navButtonDisabled}`}
+      disabled
+    >
+      ← Prev
+    </button>
+  );
+}
+
+function NextButton({ nextPageId, buildPageLink }) {
+  if (nextPageId) {
+    return (
+      <Link to={buildPageLink(nextPageId)}>
+        <button className={styles.navButton}>Next →</button>
+      </Link>
+    );
+  }
+  return (
+    <button
+      className={`${styles.navButton} ${styles.navButtonDisabled}`}
+      disabled
+    >
+      Next →
+    </button>
   );
 }

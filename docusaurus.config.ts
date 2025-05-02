@@ -22,6 +22,8 @@ export interface TextManifest {
   textSlug: string;
   /** Name of the text, e.g. "CCAG 1" */
   textName: string;
+  /** URL to the GitHub repository for the text */
+  githubRepo: string;
   /** List of pages in the text */
   pages: TextManifestPage[];
 }
@@ -71,6 +73,7 @@ const loadManifest = (manifestFile: string): TextManifest => {
   return {
     textSlug: manifest.text_slug,
     textName: manifest.text_name,
+    githubRepo: manifest.github_repo,
     pages: mappedPages,
   };
 };
@@ -119,7 +122,7 @@ const config: Config = {
       title: "Scriptorai",
       logo: {
         alt: "Scriptorai Logo",
-        src: "img/logo.svg",
+        src: "img/scriptorai_logo_64px.png",
       },
       items: [
         // {

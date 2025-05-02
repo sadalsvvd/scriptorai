@@ -4,6 +4,7 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import ReadCCAGCallout from "../components/ReadCCAGCallout";
+
 // import Heading from "@theme/Heading";
 
 // import styles from "./index.module.css";
@@ -28,10 +29,41 @@ export default function Home(): ReactNode {
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />"
     >
+      <style>{`
+        .scriptorai-logo {
+          display: block;
+          max-width: 200px;
+          width: 100%;
+          height: auto;
+          margin-bottom: 24px;
+        }
+        @media (min-width: 768px) {
+          .scriptorai-logo {
+            float: left;
+            margin-right: 32px;
+            margin-bottom: 24px;
+            margin-left: 0;
+            margin-top: 4px;
+          }
+        }
+        @media (max-width: 767px) {
+          .scriptorai-logo {
+            float: none;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+          }
+        }
+      `}</style>
       <main style={{ padding: 24 }}>
+        <img
+          src={require("@site/static/img/scriptorai_logo_200px.png").default}
+          alt="Scriptorai Logo"
+          className="scriptorai-logo"
+        />
         <h3>What is Scriptorai?</h3>
         <p>
-          <b>Scriptorai</b> is an open source community-oriented project which
+          <b>Scriptorai</b> is an open source, community-oriented project which
           hosts first-pass, LLM-powered translations of public domain esoteric
           texts, seeking to make previously inaccessible texts browsable by
           human beings and real translators which can then be improved upon
@@ -70,9 +102,9 @@ export default function Home(): ReactNode {
           simply that the number of people with the interest, knowledge, and
           opportunity to translate texts like these are vanishingly few,
           numbering in <i>maybe</i> the dozens. By batch-translating these
-          texts, we can at least extract indices and topics that can indicate
-          where skilled human effort should be applied to produce high-quality
-          translations.
+          texts, we can at least make it easier to understand their contents and
+          choose where skilled human effort should be applied to produce
+          high-quality translations.
         </p>
         <p>
           By using the output of these AI translations, I have also been able to

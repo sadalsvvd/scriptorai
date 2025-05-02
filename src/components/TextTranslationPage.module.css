@@ -1,0 +1,57 @@
+.navRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.navRowBelow {
+  margin-top: 32px;
+  margin-bottom: 0;
+}
+
+.navButton {
+  font-size: 1.05rem;
+  font-weight: 500;
+  padding: 0.5em 1.5em;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #222;
+  box-shadow: 0 1px 4px #0001;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.09s, border 0.18s;
+}
+
+.navButton:hover:not(:disabled),
+.navButton:focus-visible:not(:disabled) {
+  background: #e5e7eb;
+  color: #111;
+  border-color: #a5b4fc;
+  box-shadow: 0 2px 8px #0002;
+  transform: translateY(-1px) scale(1.02);
+}
+
+.navButton:active:not(:disabled) {
+  background: #e0e7ff;
+  color: #3730a3;
+  border-color: #818cf8;
+}
+
+.navButton:disabled,
+.navButtonDisabled {
+  background: #f3f4f6;
+  color: #bbb;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.infoLine {
+  text-align: center;
+  color: #666;
+  font-size: 1rem;
+  margin: 18px 0 0 0;
+  letter-spacing: 0.01em;
+}

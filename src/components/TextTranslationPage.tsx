@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Layout from "@theme/Layout";
 import ReactMarkdown from "react-markdown";
 import Link from "@docusaurus/Link";
@@ -75,6 +75,8 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
   );
   const [transcriptionText, setTranscriptionText] = useState("");
   const [translationText, setTranslationText] = useState("");
+  const [goToPage, setGoToPage] = useState("");
+  const goToInputRef = useRef(null);
 
   useEffect(() => {
     fetch(transcription)
@@ -117,6 +119,17 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [prevPageId, nextPageId, leftView, rightView]);
+
+  function handleGoToPage(e) {
+    e.preventDefault();
+    const num = Number(goToPage);
+    if (!num || num < 1 || num > pageCount) return;
+    // Pad the page number to 4 digits
+    const paddedPageId = num.toString().padStart(4, "0");
+    window.location.href = buildPageLink(paddedPageId);
+    setGoToPage("");
+    if (goToInputRef.current) goToInputRef.current.blur();
+  }
 
   const renderPane = (view: (typeof VIEW_TYPES)[number]) => {
     if (view === "image") {
@@ -190,7 +203,8 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
             }}
           >
             <h2 style={{ fontWeight: "bold", fontSize: 18 }}>
-              {props.route.customData.textName} - Page {pageInt} of {pageCount}
+              {props.route.customData.textName} - Page {pageInt} of{" "}
+              {pageCount - 1}
             </h2>
             <p>
               PLEASE NOTE: This text was originally transcribed and translated
@@ -252,7 +266,62 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
         {/* Bottom navigation row with extra margin */}
         <div className={`${styles.navRow} ${styles.navRowBelow}`}>
           <PrevButton prevPageId={prevPageId} buildPageLink={buildPageLink} />
-          <div style={{ flex: 1 }} />
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            <form
+              onSubmit={handleGoToPage}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <input
+                  ref={goToInputRef}
+                  type="number"
+                  min={1}
+                  max={pageCount}
+                  value={goToPage}
+                  onChange={(e) =>
+                    setGoToPage(e.target.value.replace(/[^\d]/g, ""))
+                  }
+                  placeholder={`Go to page (1-${pageCount})`}
+                  style={{
+                    width: 140,
+                    padding: "10px 16px",
+                    border: "1.5px solid #bfc3ca",
+                    borderRadius: 6,
+                    fontSize: 18,
+                    marginRight: 4,
+                  }}
+                />
+                <button
+                  type="submit"
+                  className={styles.navButton}
+                  style={{ padding: "10px 24px", fontSize: 18 }}
+                  disabled={
+                    !goToPage ||
+                    Number(goToPage) < 1 ||
+                    Number(goToPage) > pageCount
+                  }
+                >
+                  Go
+                </button>
+              </div>
+              <div style={{ fontSize: 13, color: "#888", marginTop: 2 }}>
+                Pages start at 0.
+              </div>
+            </form>
+          </div>
           <NextButton nextPageId={nextPageId} buildPageLink={buildPageLink} />
         </div>
         {/* Info line about keyboard navigation */}

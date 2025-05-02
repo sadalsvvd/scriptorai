@@ -19,6 +19,7 @@ type TextTranslationPageProps = {
       image: string;
       transcription: string;
       translation: string;
+      githubRepo: string;
     };
   };
 };
@@ -40,6 +41,15 @@ function setQueryParams(params: Record<string, string | undefined>) {
     }
   });
   return `?${searchParams.toString()}`;
+}
+
+// Helper to extract filename from a URL
+function getFilenameFromUrl(url: string) {
+  try {
+    return url.split("/").pop() || "";
+  } catch {
+    return "";
+  }
 }
 
 export default function TextTranslationPage(props: TextTranslationPageProps) {
@@ -157,31 +167,67 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
         </div>
       );
     }
-    if (view === "transcription") {
-      return (
-        <div
-          style={{
-            overflowY: "auto",
-            maxHeight: "70vh",
-            background: "#f9f9f9",
-            padding: 12,
-          }}
-        >
-          <ReactMarkdown>{transcriptionText}</ReactMarkdown>
-        </div>
+    if (view === "transcription" || view === "translation") {
+      // Get the right file URL and filename
+      const fileUrl = view === "transcription" ? transcription : translation;
+      const filename = getFilenameFromUrl(fileUrl);
+      const githubRepo = props.route.customData.githubRepo;
+      const fileLink = `${githubRepo}/blob/main/${view}/${filename}`;
+      const editLink = `${githubRepo}/edit/main/${view}/${filename}`;
+      const issueTitle = `Suggestion for ${view} corrections: ${filename}`;
+      const issueBody = encodeURIComponent(
+        `I have a suggestion for corrections to the following file:\n\n` +
+          `[${filename}](${fileLink})\n\n` +
+          `(If you know how to use GitHub, you can fork this repository and edit the file directly at this link and then send a pull request: [edit this file](${editLink}))\n`
       );
-    }
-    if (view === "translation") {
+      const issueUrl = `${githubRepo}/issues/new?title=${encodeURIComponent(
+        issueTitle
+      )}&body=${issueBody}`;
       return (
-        <div
-          style={{
-            overflowY: "auto",
-            maxHeight: "70vh",
-            background: "#f9f9f9",
-            padding: 12,
-          }}
-        >
-          <ReactMarkdown>{translationText}</ReactMarkdown>
+        <div>
+          <div
+            style={{
+              overflowY: "auto",
+              maxHeight: "70vh",
+              background: "#f9f9f9",
+              padding: 12,
+            }}
+          >
+            <ReactMarkdown>
+              {view === "transcription" ? transcriptionText : translationText}
+            </ReactMarkdown>
+          </div>
+          <div
+            style={{
+              marginTop: 16,
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <a
+              href={issueUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none" }}
+            >
+              <button
+                className={styles.navButton}
+                style={{ display: "flex", alignItems: "center", gap: 8 }}
+              >
+                {/* GitHub logo SVG */}
+                <svg
+                  height="20"
+                  width="20"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+                Suggest Corrections on GitHub
+              </button>
+            </a>
+          </div>
         </div>
       );
     }

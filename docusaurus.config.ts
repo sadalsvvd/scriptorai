@@ -198,6 +198,7 @@ const config: Config = {
                   image: page.imagePath,
                   transcription: page.transcriptionPath,
                   translation: page.translationPath,
+                  githubRepo: manifest.githubRepo,
                 },
               });
             });

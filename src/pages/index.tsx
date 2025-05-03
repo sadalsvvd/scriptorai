@@ -69,7 +69,10 @@ export default function Home(): ReactNode {
           human beings and real translators which can then be improved upon
           collaboratively. My first focus is to translate all available PDF
           volumes of the{" "}
-          <a href="https://en.wikipedia.org/wiki/Catalogus_Codicum_Astrologorum_Graecorum">
+          <a
+            href="https://en.wikipedia.org/wiki/Catalogus_Codicum_Astrologorum_Graecorum"
+            target="_blank"
+          >
             Catalogus Codicum Astrologorum Graecorum
           </a>{" "}
           (CCAG), a 12-volume catalogue of all known astrological writings in
@@ -81,7 +84,10 @@ export default function Home(): ReactNode {
         <h3>Why AI translation?</h3>
         <p>
           AI translation (with{" "}
-          <a href="https://en.wikipedia.org/wiki/Large_language_model">
+          <a
+            href="https://en.wikipedia.org/wiki/Large_language_model"
+            target="_blank"
+          >
             large language models
           </a>
           ) is far from perfect and cannot replace real skilled human
@@ -107,14 +113,12 @@ export default function Home(): ReactNode {
           high-quality translations.
         </p>
         <p>
-          By using the output of these AI translations, I have also been able to
-          construct full indices of terms for each book, allowing you to browse
-          by term. Full-text search will be available soon.
-        </p>
-        <p>
           Some have criticized AI for its high energy usage, but these claims
           are usually overexaggerated and underresearched.{" "}
-          <a href="https://andymesley.substack.com/p/a-cheat-sheet-for-conversations-about">
+          <a
+            href="https://andymesley.substack.com/p/a-cheat-sheet-for-conversations-about"
+            target="_blank"
+          >
             This is a good resource for understanding the real impact of AI on
             the environment in terms of its energy usage.
           </a>{" "}
@@ -128,17 +132,61 @@ export default function Home(): ReactNode {
           translation, you can help suggest changes under any page by clicking
           the "Suggest Corrections on GitHub" button, which will allow you to
           contribute suggestions directly to the{" "}
-          <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories">
+          <a
+            href="https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories"
+            target="_blank"
+          >
             GitHub repository
           </a>{" "}
           which contains the image, translation, and transcription files for the
           given text.
         </p>
-        <h2>Transparent and open source</h2>
+        <h2>Open source and public domain</h2>
+        <p>
+          Considering that the source texts are now in the public domain, it is
+          important to me that all of the tools used to produce the
+          transcriptions, translations, and this site, are open source and
+          publicly available.
+        </p>
         <p>
           Scriptorai is fully open source, and the code for the project is
-          available on{" "}
-          <a href="https://github.com/sadalsvvd/scriptorai">GitHub</a>.
+          available on GitHub at{" "}
+          <a href="https://github.com/sadalsvvd/scriptorai">
+            sadalsvvd/scriptorai
+          </a>
+          . Scriptorai is this site itself, which is licensed under the{" "}
+          <a href="https://choosealicense.com/licenses/mit/" target="_blank">
+            MIT license
+          </a>
+          .
+        </p>
+        <p>
+          The individual CCAG volumes' repositories and associated
+          transcriptions and translations are licensed into the public domain
+          under the{" "}
+          <a
+            href="https://choosealicense.com/licenses/cc0-1.0/"
+            target="_blank"
+          >
+            Creative Commons Zero v1.0 Universal
+          </a>{" "}
+          license. You can find the repository for the first volume of the CCAG
+          on GitHub at{" "}
+          <a
+            href="https://github.com/sadalsvvd/scriptorai-ccag-01"
+            target="_blank"
+          >
+            sadalsvvd/scriptorai-ccag-01
+          </a>
+          .
+        </p>
+        <p>
+          The tool used to produce the translations and transcriptions is called{" "}
+          <b>hemiplon</b>, or "half-doubling", available on GitHub at{" "}
+          <a href="https://github.com/sadalsvvd/hemiplon" target="_blank">
+            sadalsvvd/hemiplon
+          </a>
+          . It is also licensed under the MIT license.
         </p>
         <h2>Known Issues</h2>
         <p>

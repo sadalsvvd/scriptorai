@@ -30,6 +30,8 @@ export default function SearchPage() {
   const didAutoSearch = useRef(false);
   // Store the last submitted search term
   const [lastSearchTerm, setLastSearchTerm] = useState("");
+  // State for exact match checkbox
+  const [exactMatch, setExactMatch] = useState(false);
 
   // On mount, check for ?q= in the URL and set query if present
   useEffect(() => {
@@ -132,7 +134,7 @@ export default function SearchPage() {
     const upToDateIndices = await ensureIndicesLoaded();
     logDebug("Starting search", { selectedTexts, query });
     // After loading, build lunr indices and search
-    const allResults = [];
+    let allResults = [];
     for (const slug of selectedTexts) {
       const entries = upToDateIndices[slug];
       if (!entries) {
@@ -182,6 +184,14 @@ export default function SearchPage() {
       });
       logDebug(`Mapped results for ${slug}`, mapped);
       allResults.push(...mapped);
+    }
+    // If exact match is checked, filter results to only those with the exact term in text (case-insensitive)
+    if (exactMatch && query) {
+      const qLower = query.toLowerCase();
+      allResults = allResults.filter(
+        (r) => r.text && r.text.toLowerCase().includes(qLower)
+      );
+      logDebug("Filtered for exact match", allResults);
     }
     // Sort results by score descending
     allResults.sort((a, b) => b.score - a.score);
@@ -254,6 +264,15 @@ export default function SearchPage() {
             style={{ width: 300, marginRight: 12 }}
             required
           />
+          <label style={{ marginRight: 12 }}>
+            <input
+              type="checkbox"
+              checked={exactMatch}
+              onChange={(e) => setExactMatch(e.target.checked)}
+              style={{ marginRight: 4 }}
+            />
+            Exact match
+          </label>
           <button
             type="submit"
             disabled={loading || !query || selectedTexts.length === 0}

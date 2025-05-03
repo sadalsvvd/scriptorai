@@ -121,6 +121,16 @@ const config: Config = {
       },
       items: [
         {
+          label: "CCAG Volume 1",
+          to: "/texts/CCAG_1/0001",
+          position: "left",
+        },
+        {
+          label: "Search Texts",
+          to: "/search",
+          position: "left",
+        },
+        {
           href: "https://github.com/sadalsvvd/scriptorai",
           label: "GitHub",
           position: "right",

@@ -126,6 +126,15 @@ export default function Home(): ReactNode {
           to English readers far outweigh the one-time cost of the energy used
           to translate them per text.
         </p>
+        <h2>Full text search</h2>
+        <p>
+          One major benefit is that with the full transcription produced, I have
+          implemented a full text search feature that can help you find passages
+          of interest in the texts.{" "}
+          <a href="/search">
+            <b>Try it out here!</b>
+          </a>
+        </p>
         <h2>Help with translation</h2>
         <p>
           If you spot an issue or have a correction for either transcription or

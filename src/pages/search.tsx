@@ -146,6 +146,30 @@ export default function SearchPage() {
     setResults(allResults);
   }
 
+  // Helper to get all matches with context
+  function getContextualMatches(text, term) {
+    if (!term) return [];
+    const matches = [];
+    const lowerText = text.toLowerCase();
+    const lowerTerm = term.toLowerCase();
+    let idx = 0;
+    while ((idx = lowerText.indexOf(lowerTerm, idx)) !== -1) {
+      const start = Math.max(0, idx - 100);
+      const end = Math.min(text.length, idx + lowerTerm.length + 100);
+      const prefix = start > 0 ? "..." : "";
+      const suffix = end < text.length ? "..." : "";
+      const snippet =
+        prefix +
+        text.slice(start, idx) +
+        text.slice(idx, idx + lowerTerm.length) +
+        text.slice(idx + lowerTerm.length, end) +
+        suffix;
+      matches.push(snippet);
+      idx += lowerTerm.length;
+    }
+    return matches;
+  }
+
   return (
     <Layout
       title={`Scriptorai - Translating the CCAG`}
@@ -191,31 +215,71 @@ export default function SearchPage() {
           )}
           {results.length > 0 && (
             <ul style={{ listStyle: "none", padding: 0 }}>
-              {results.map((r, i) => (
-                <li
-                  key={r.id + i}
-                  style={{
-                    border: "1px solid #eee",
-                    borderRadius: 6,
-                    marginBottom: 16,
-                    padding: 16,
-                    background: "#fafbfc",
-                  }}
-                >
-                  <div style={{ fontWeight: 600, marginBottom: 4 }}>
-                    {r.title}
-                  </div>
-                  <div style={{ fontSize: 13, color: "#666", marginBottom: 6 }}>
-                    <span>Text: {r.slug}</span> | <span>Page: {r.page}</span>
-                  </div>
-                  <div style={{ fontSize: 15, whiteSpace: "pre-line" }}>
-                    {/* Show a snippet of the text, highlight is left as an exercise for the reader */}
-                    {r.text && r.text.length > 400
-                      ? r.text.slice(0, 400) + "..."
-                      : r.text}
-                  </div>
-                </li>
-              ))}
+              {results.map((r, i) => {
+                // Compute contextual matches for this result
+                const snippets = r.text
+                  ? getContextualMatches(r.text, query)
+                  : [];
+                return (
+                  <li
+                    key={r.id + i}
+                    style={{
+                      border: "1px solid #eee",
+                      borderRadius: 6,
+                      marginBottom: 16,
+                      padding: 16,
+                      background: "#fafbfc",
+                    }}
+                  >
+                    <div style={{ fontWeight: 600, marginBottom: 4 }}>
+                      <a
+                        href={`/texts/${r.project}/${r.page_id_string}`}
+                        style={{
+                          color: "#1a0dab",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        {r.title}
+                      </a>
+                    </div>
+                    <div
+                      style={{ fontSize: 13, color: "#666", marginBottom: 6 }}
+                    >
+                      <span>Text: {r.slug}</span> |{" "}
+                      <span>Page: {r.page_name || r.page}</span>
+                    </div>
+                    {/* Show contextual snippets for each match */}
+                    {snippets.length > 0 && (
+                      <ul
+                        style={{ paddingLeft: 18, margin: 0, marginBottom: 8 }}
+                      >
+                        {snippets.map((snippet, idx) => (
+                          <li
+                            key={idx}
+                            style={{
+                              fontSize: 15,
+                              marginBottom: 6,
+                              background: "#fffbe6",
+                              borderRadius: 4,
+                              padding: "4px 8px",
+                            }}
+                          >
+                            {snippet}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {/* Fallback: if no matches, show a snippet of the text */}
+                    {snippets.length === 0 && r.text && (
+                      <div style={{ fontSize: 15, whiteSpace: "pre-line" }}>
+                        {r.text.length > 400
+                          ? r.text.slice(0, 400) + "..."
+                          : r.text}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>

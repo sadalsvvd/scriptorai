@@ -121,6 +121,8 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
   // Keyboard navigation: left/right arrow keys
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      // Don't navigate if any modifier key is held
+      if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
       if (e.key === "ArrowLeft" && prevPageId) {
         window.location.href = buildPageLink(prevPageId);
       } else if (e.key === "ArrowRight" && nextPageId) {

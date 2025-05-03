@@ -235,10 +235,17 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
     return null;
   };
 
+  const pageTitle = `${props.route.customData.textName} - Page ${pageInt} of ${
+    pageCount - 1
+  }`;
+
   return (
     <BrowserOnly>
       {() => (
-        <Layout>
+        <Layout
+          title={`${pageTitle} - Scriptorai`}
+          description="Scriptorai is an open source, community-oriented project which hosts first-pass, LLM-powered translations of public domain esoteric texts, seeking to make previously inaccessible texts browsable by human beings and real translators which can then be improved upon collaboratively."
+        >
           <div style={{ padding: 24 }}>
             {/* Top navigation row with title/desc in center */}
             <div className={styles.navRow}>

@@ -76,7 +76,7 @@ const loadManifest = (manifestFile: string): TextManifest => {
 const config: Config = {
   title: "Scriptorai",
   tagline: "More than half done",
-  favicon: "img/favicon.ico",
+  favicon: "img/scriptorai_logo_64px.png",
 
   // Set the production url of your site here
   url: "https://scriptorai.sadalsvvd.com",
@@ -112,7 +112,7 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: "img/docusaurus-social-card.jpg",
+    image: "img/202505031427_Scriptorai_social_card.jpg",
     navbar: {
       title: "Scriptorai",
       logo: {
@@ -120,12 +120,6 @@ const config: Config = {
         src: "img/scriptorai_logo_64px.png",
       },
       items: [
-        // {
-        //   type: "docSidebar",
-        //   sidebarId: "tutorialSidebar",
-        //   position: "left",
-        //   label: "Tutorial",
-        // },
         {
           href: "https://github.com/sadalsvvd/scriptorai",
           label: "GitHub",

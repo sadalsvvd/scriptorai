@@ -26,8 +26,8 @@ export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title={`Scriptorai - Translating the CCAG`}
+      description="Scriptorai is an open source, community-oriented project which hosts first-pass, LLM-powered translations of public domain esoteric texts, seeking to make previously inaccessible texts browsable by human beings and real translators which can then be improved upon collaboratively."
     >
       <style>{`
         .scriptorai-logo {
@@ -122,10 +122,36 @@ export default function Home(): ReactNode {
           to English readers far outweigh the one-time cost of the energy used
           to translate them per text.
         </p>
+        <h2>Help with translation</h2>
+        <p>
+          If you spot an issue or have a correction for either transcription or
+          translation, you can help suggest changes under any page by clicking
+          the "Suggest Corrections on GitHub" button, which will allow you to
+          contribute suggestions directly to the{" "}
+          <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories">
+            GitHub repository
+          </a>{" "}
+          which contains the image, translation, and transcription files for the
+          given text.
+        </p>
+        <h2>Transparent and open source</h2>
+        <p>
+          Scriptorai is fully open source, and the code for the project is
+          available on{" "}
+          <a href="https://github.com/sadalsvvd/scriptorai">GitHub</a>.
+        </p>
         <h2>Known Issues</h2>
         <p>
           <ul>
-            <li>Handling of sentences across pages is not perfect</li>
+            <li>
+              Translation of sentences across pages does not work well yet; make
+              sure to check sentences which continue across multiple pages
+            </li>
+            <li>
+              Certain numerical values may be transliterated incorrectly, such
+              as years and months being changed to incorrect decimal year
+              values. Check these values carefully.
+            </li>
           </ul>
         </p>
       </main>

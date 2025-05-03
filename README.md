@@ -1,46 +1,18 @@
-# Website
+# Scriptorai
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+Scriptorai is an open source Docusaurus site for browsing AI-generated translations of public domain esoteric texts, with an initial focus on the Catalogus Codicum Astrologorum Graecorum (CCAG), built with Docusaurus.
 
-### Installation
+## Features
 
-```
-$ yarn
-```
+- Side-by-side viewer for scanned images, transcriptions, and AI translations
+- Easy navigation between pages (keyboard or UI)
+- Suggest corrections directly via GitHub
+- Community-driven, open source
 
-### Local Development
+## Getting Started
 
-```
-$ yarn start
-```
+For details on how to run this site, see `https://docusaurus.io/`.
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+# License
 
-### Build
-
-```
-$ yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
-
-# resources
-
-https://www.tzeyiing.com/posts/how-to-generate-dynamic-pages-for-docusaurus/
-
+Scriptorai is licensed under the permissive [MIT license](https://choosealicense.com/licenses/mit/). 

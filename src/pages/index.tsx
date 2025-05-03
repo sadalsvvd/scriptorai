@@ -143,7 +143,7 @@ export default function Home(): ReactNode {
         </p>
         <h2>Open source and public domain</h2>
         <p>
-          Considering that the source texts are now in the public domain, it is
+          Considering that the source texts are in the public domain, it is
           important to me that all of the tools used to produce the
           transcriptions, translations, and this site, are open source and
           publicly available.
@@ -152,7 +152,7 @@ export default function Home(): ReactNode {
           Scriptorai is fully open source, and the code for the project is
           available on GitHub at{" "}
           <a href="https://github.com/sadalsvvd/scriptorai">
-            sadalsvvd/scriptorai
+            <b>sadalsvvd/scriptorai</b>
           </a>
           . Scriptorai is this site itself, which is licensed under the{" "}
           <a href="https://choosealicense.com/licenses/mit/" target="_blank">
@@ -176,7 +176,7 @@ export default function Home(): ReactNode {
             href="https://github.com/sadalsvvd/scriptorai-ccag-01"
             target="_blank"
           >
-            sadalsvvd/scriptorai-ccag-01
+            <b>sadalsvvd/scriptorai-ccag-01</b>
           </a>
           .
         </p>
@@ -184,7 +184,7 @@ export default function Home(): ReactNode {
           The tool used to produce the translations and transcriptions is called{" "}
           <b>hemiplon</b>, or "half-doubling", available on GitHub at{" "}
           <a href="https://github.com/sadalsvvd/hemiplon" target="_blank">
-            sadalsvvd/hemiplon
+            <b>sadalsvvd/hemiplon</b>
           </a>
           . It is also licensed under the MIT license.
         </p>

@@ -11,7 +11,7 @@ Scriptorai is an open source Docusaurus site for browsing AI-generated translati
 
 ## Getting Started
 
-For details on how to run this site, see `https://docusaurus.io/`.
+For details on how to run this site locally, see the [Docusaurus documentation](https://docusaurus.io/).
 
 # License
 

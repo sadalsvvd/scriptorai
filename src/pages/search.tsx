@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import lunr from "lunr";
@@ -27,6 +27,36 @@ export default function SearchPage() {
   const [error, setError] = useState(null);
   // Debug log state
   const [debugLogs, setDebugLogs] = useState([]);
+  const didAutoSearch = useRef(false);
+  // Store the last submitted search term
+  const [lastSearchTerm, setLastSearchTerm] = useState("");
+
+  // On mount, check for ?q= in the URL and set query if present
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q") || "";
+    if (q && !query) {
+      setQuery(q);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // When query changes, if it was set from the URL and we haven't auto-searched, auto-search
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q") || "";
+    if (q && query === q && !didAutoSearch.current) {
+      didAutoSearch.current = true;
+      setTimeout(() => {
+        document
+          .getElementById("search-form")
+          ?.dispatchEvent(
+            new Event("submit", { cancelable: true, bubbles: true })
+          );
+      }, 0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   // Helper to add to debug log (and console)
   function logDebug(msg, data) {
@@ -83,9 +113,22 @@ export default function SearchPage() {
   // Handle search submit
   async function handleSearch(e) {
     e.preventDefault();
+    // Update the URL with the search term as a query param
+    const params = new URLSearchParams(window.location.search);
+    if (query) {
+      params.set("q", query);
+    } else {
+      params.delete("q");
+    }
+    const newUrl =
+      window.location.pathname +
+      (params.toString() ? `?${params.toString()}` : "");
+    window.history.replaceState({}, "", newUrl);
+
     setResults([]);
     setError(null);
     setDebugLogs([]);
+    setLastSearchTerm(query); // Only update on submit
     const upToDateIndices = await ensureIndicesLoaded();
     logDebug("Starting search", { selectedTexts, query });
     // After loading, build lunr indices and search
@@ -146,7 +189,7 @@ export default function SearchPage() {
     setResults(allResults);
   }
 
-  // Helper to get all matches with context
+  // Helper to get all matches with context, highlighting only the match
   function getContextualMatches(text, term) {
     if (!term) return [];
     const matches = [];
@@ -158,13 +201,20 @@ export default function SearchPage() {
       const end = Math.min(text.length, idx + lowerTerm.length + 100);
       const prefix = start > 0 ? "..." : "";
       const suffix = end < text.length ? "..." : "";
-      const snippet =
-        prefix +
-        text.slice(start, idx) +
-        text.slice(idx, idx + lowerTerm.length) +
-        text.slice(idx + lowerTerm.length, end) +
-        suffix;
-      matches.push(snippet);
+      const before = text.slice(start, idx);
+      const match = text.slice(idx, idx + lowerTerm.length);
+      const after = text.slice(idx + lowerTerm.length, end);
+      matches.push(
+        <>
+          {prefix}
+          {before}
+          <span style={{ background: "#ffe066", fontWeight: 600 }}>
+            {match}
+          </span>
+          {after}
+          {suffix}
+        </>
+      );
       idx += lowerTerm.length;
     }
     return matches;
@@ -172,13 +222,17 @@ export default function SearchPage() {
 
   return (
     <Layout
-      title={`Scriptorai - Translating the CCAG`}
+      title={`Scriptorai - Search`}
       description="Scriptorai is an open source, community-oriented project which hosts first-pass, LLM-powered translations of public domain esoteric texts, seeking to make previously inaccessible texts browsable by human beings and real translators which can then be improved upon collaboratively."
     >
       <main className={"container"} style={{ padding: 24, maxWidth: 900 }}>
         <h1>Search</h1>
         {/* Text selection UI */}
-        <form onSubmit={handleSearch} style={{ marginBottom: 24 }}>
+        <form
+          id="search-form"
+          onSubmit={handleSearch}
+          style={{ marginBottom: 24 }}
+        >
           <fieldset style={{ border: "none", marginBottom: 16 }}>
             <legend style={{ fontWeight: 600 }}>Select texts to search:</legend>
             {AVAILABLE_TEXTS.map((t) => (
@@ -218,7 +272,7 @@ export default function SearchPage() {
               {results.map((r, i) => {
                 // Compute contextual matches for this result
                 const snippets = r.text
-                  ? getContextualMatches(r.text, query)
+                  ? getContextualMatches(r.text, lastSearchTerm)
                   : [];
                 return (
                   <li
@@ -259,7 +313,7 @@ export default function SearchPage() {
                             style={{
                               fontSize: 15,
                               marginBottom: 6,
-                              background: "#fffbe6",
+                              // background: "#fffbe6",
                               borderRadius: 4,
                               padding: "4px 8px",
                             }}

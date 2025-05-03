@@ -31,18 +31,15 @@ export interface TextManifest {
 const gatherManifests = (): TextManifest[] => {
   const textsDir = join(process.cwd(), "static/texts_assets");
   let allManifests: TextManifest[] = [];
-  console.log("GATHER MANIFESTS");
+
   try {
     // Get all subdirectories within static/texts
     const textDirs = readdirSync(textsDir, { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())
       .map((dirent) => dirent.name);
-    console.log("TEXT DIRS");
 
     // Process each subdirectory
     textDirs.forEach((textDir) => {
-      console.log("TEXT DIR");
-      console.log(textDir);
       const manifestPath = join(textsDir, textDir, "manifest.json");
       if (existsSync(manifestPath)) {
         const manifest = loadManifest(manifestPath);
@@ -59,8 +56,6 @@ const gatherManifests = (): TextManifest[] => {
 
 const loadManifest = (manifestFile: string): TextManifest => {
   const manifest = JSON.parse(readFileSync(manifestFile, "utf8"));
-  console.log("MANIFEST");
-  console.log(manifest);
 
   const mappedPages = manifest.pages.map((page: any) => ({
     pageId: page.page_id,
@@ -84,7 +79,7 @@ const config: Config = {
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: "https://scriptorai.sadalsvvd.com",
+  url: "http://localhost:3001",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",

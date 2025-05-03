@@ -3,6 +3,7 @@ import Layout from "@theme/Layout";
 import ReactMarkdown from "react-markdown";
 import Link from "@docusaurus/Link";
 import styles from "./TextTranslationPage.module.css";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 const VIEW_TYPES = ["image", "transcription", "translation"] as const;
 
@@ -235,147 +236,166 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
   };
 
   return (
-    <Layout>
-      <div style={{ padding: 24 }}>
-        {/* Top navigation row with title/desc in center */}
-        <div className={styles.navRow}>
-          <PrevButton prevPageId={prevPageId} buildPageLink={buildPageLink} />
-          <div
-            style={{
-              paddingLeft: 50,
-              paddingRight: 50,
-              textAlign: "center",
-              flex: 1,
-            }}
-          >
-            <h2 style={{ fontWeight: "bold", fontSize: 18 }}>
-              {props.route.customData.textName} - Page {pageInt} of{" "}
-              {pageCount - 1}
-            </h2>
-            <p>
-              PLEASE NOTE: This text was originally transcribed and translated
-              with LLMs, provided as a starting point. There are likely to be
-              errors. You can submit corrections with the "Suggest Corrections"
-              button in the transcription and translation views.
-            </p>
-          </div>
-          <NextButton nextPageId={nextPageId} buildPageLink={buildPageLink} />
-        </div>
-        {/* Viewer panes */}
-        <div style={{ display: "flex", gap: 24 }}>
-          {[
-            { side: "left", view: leftView, setView: setLeftView },
-            { side: "right", view: rightView, setView: setRightView },
-          ].map(({ side, view, setView }) => (
-            <div
-              key={side}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                border: "1px solid #eee",
-                borderRadius: 8,
-                background: "#fff",
-                boxShadow: "0 1px 4px #0001",
-              }}
-            >
+    <BrowserOnly>
+      {() => (
+        <Layout>
+          <div style={{ padding: 24 }}>
+            {/* Top navigation row with title/desc in center */}
+            <div className={styles.navRow}>
+              <PrevButton
+                prevPageId={prevPageId}
+                buildPageLink={buildPageLink}
+              />
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 8,
-                  padding: 8,
-                  borderBottom: "1px solid #eee",
-                  background: "#f5f5f5",
+                  paddingLeft: 50,
+                  paddingRight: 50,
+                  textAlign: "center",
+                  flex: 1,
                 }}
               >
-                {VIEW_TYPES.map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setView(type)}
+                <h2 style={{ fontWeight: "bold", fontSize: 18 }}>
+                  {props.route.customData.textName} - Page {pageInt} of{" "}
+                  {pageCount - 1}
+                </h2>
+                <p>
+                  PLEASE NOTE: This text was originally transcribed and
+                  translated with LLMs, provided as a starting point. There are
+                  likely to be errors. You can submit corrections with the
+                  "Suggest Corrections" button in the transcription and
+                  translation views.
+                </p>
+              </div>
+              <NextButton
+                nextPageId={nextPageId}
+                buildPageLink={buildPageLink}
+              />
+            </div>
+            {/* Viewer panes */}
+            <div style={{ display: "flex", gap: 24 }}>
+              {[
+                { side: "left", view: leftView, setView: setLeftView },
+                { side: "right", view: rightView, setView: setRightView },
+              ].map(({ side, view, setView }) => (
+                <div
+                  key={side}
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    border: "1px solid #eee",
+                    borderRadius: 8,
+                    background: "#fff",
+                    boxShadow: "0 1px 4px #0001",
+                  }}
+                >
+                  <div
                     style={{
-                      fontWeight: view === type ? "bold" : "normal",
-                      background: view === type ? "#e0e0e0" : "transparent",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: 4,
-                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: 8,
+                      padding: 8,
+                      borderBottom: "1px solid #eee",
+                      background: "#f5f5f5",
                     }}
                   >
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </button>
-                ))}
-              </div>
-              <div style={{ padding: 12 }}>{renderPane(view)}</div>
+                    {VIEW_TYPES.map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => setView(type)}
+                        style={{
+                          fontWeight: view === type ? "bold" : "normal",
+                          background: view === type ? "#e0e0e0" : "transparent",
+                          border: "none",
+                          padding: "6px 12px",
+                          borderRadius: 4,
+                          cursor: "pointer",
+                        }}
+                      >
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+                  <div style={{ padding: 12 }}>{renderPane(view)}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        {/* Bottom navigation row with extra margin */}
-        <div className={`${styles.navRow} ${styles.navRowBelow}`}>
-          <PrevButton prevPageId={prevPageId} buildPageLink={buildPageLink} />
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 12,
-            }}
-          >
-            <form
-              onSubmit={handleGoToPage}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 4,
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <input
-                  ref={goToInputRef}
-                  type="number"
-                  min={1}
-                  max={pageCount}
-                  value={goToPage}
-                  onChange={(e) =>
-                    setGoToPage(e.target.value.replace(/[^\d]/g, ""))
-                  }
-                  placeholder={`Go to page (1-${pageCount})`}
+            {/* Bottom navigation row with extra margin */}
+            <div className={`${styles.navRow} ${styles.navRowBelow}`}>
+              <PrevButton
+                prevPageId={prevPageId}
+                buildPageLink={buildPageLink}
+              />
+              <div
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 12,
+                }}
+              >
+                <form
+                  onSubmit={handleGoToPage}
                   style={{
-                    width: 140,
-                    padding: "10px 16px",
-                    border: "1.5px solid #bfc3ca",
-                    borderRadius: 6,
-                    fontSize: 18,
-                    marginRight: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 4,
                   }}
-                />
-                <button
-                  type="submit"
-                  className={styles.navButton}
-                  style={{ padding: "10px 24px", fontSize: 18 }}
-                  disabled={
-                    !goToPage ||
-                    Number(goToPage) < 1 ||
-                    Number(goToPage) > pageCount
-                  }
                 >
-                  Go
-                </button>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  >
+                    <input
+                      ref={goToInputRef}
+                      type="number"
+                      min={1}
+                      max={pageCount}
+                      value={goToPage}
+                      onChange={(e) =>
+                        setGoToPage(e.target.value.replace(/[^\d]/g, ""))
+                      }
+                      placeholder={`Go to page (1-${pageCount})`}
+                      style={{
+                        width: 140,
+                        padding: "10px 16px",
+                        border: "1.5px solid #bfc3ca",
+                        borderRadius: 6,
+                        fontSize: 18,
+                        marginRight: 4,
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      className={styles.navButton}
+                      style={{ padding: "10px 24px", fontSize: 18 }}
+                      disabled={
+                        !goToPage ||
+                        Number(goToPage) < 1 ||
+                        Number(goToPage) > pageCount
+                      }
+                    >
+                      Go
+                    </button>
+                  </div>
+                  <div style={{ fontSize: 13, color: "#888", marginTop: 2 }}>
+                    Pages start at 0.
+                  </div>
+                </form>
               </div>
-              <div style={{ fontSize: 13, color: "#888", marginTop: 2 }}>
-                Pages start at 0.
-              </div>
-            </form>
+              <NextButton
+                nextPageId={nextPageId}
+                buildPageLink={buildPageLink}
+              />
+            </div>
+            {/* Info line about keyboard navigation */}
+            <div className={styles.infoLine}>
+              Tip: You can use the left and right arrow keys to navigate pages.
+            </div>
           </div>
-          <NextButton nextPageId={nextPageId} buildPageLink={buildPageLink} />
-        </div>
-        {/* Info line about keyboard navigation */}
-        <div className={styles.infoLine}>
-          Tip: You can use the left and right arrow keys to navigate pages.
-        </div>
-      </div>
-    </Layout>
+        </Layout>
+      )}
+    </BrowserOnly>
   );
 }
 

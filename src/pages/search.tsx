@@ -357,7 +357,7 @@ export default function SearchPage() {
           )}
         </div>
         {/* Debug info section */}
-        <details
+        {/* <details
           style={{
             marginTop: 32,
             background: "#f5f5f5",
@@ -393,7 +393,7 @@ export default function SearchPage() {
               </div>
             ))}
           </div>
-        </details>
+        </details> */}
       </main>
     </Layout>
   );

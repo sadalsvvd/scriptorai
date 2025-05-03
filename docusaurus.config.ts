@@ -140,7 +140,7 @@ const config: Config = {
     footer: {
       style: "dark",
       links: [],
-      copyright: `Copyright © ${new Date().getFullYear()} @sadalsvvd. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} <a href="https://sadalsvvd.space">sadalsvvd</a>. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

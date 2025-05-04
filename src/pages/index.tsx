@@ -126,6 +126,16 @@ export default function Home(): ReactNode {
           to English readers far outweigh the one-time cost of the energy used
           to translate them per text.
         </p>
+        <p>
+          For a longer (but similar) post on my thought of the significance of
+          the CCAG and why I'm doing this, see my{" "}
+          <a
+            href="https://sadalsvvd.substack.com/p/scriptorai-translating-the-most-important"
+            target="_blank"
+          >
+            Scriptorai announcement post on Substack.
+          </a>
+        </p>
         <h2>Full text search</h2>
         <p>
           One major benefit is that with the full transcription produced, I have
@@ -211,6 +221,20 @@ export default function Home(): ReactNode {
               values. Check these values carefully.
             </li>
           </ul>
+        </p>
+        <h2>Contact</h2>
+        <p>
+          If you have any questions or feedback, you can email me at{" "}
+          <a href="mailto:sadalsvvd@gmail.com">sadalsvvd@gmail.com</a>, or @ me
+          on Bluesky at{" "}
+          <a href="https://bsky.app/profile/sadalsvvd.space" target="_blank">
+            sadalsvvd.space
+          </a>
+          . You can find my personal website at{" "}
+          <a href="https://sadalsvvd.space/" target="_blank">
+            sadalsvvd.space
+          </a>
+          .
         </p>
       </main>
     </Layout>

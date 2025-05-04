@@ -200,6 +200,7 @@ export default function Home(): ReactNode {
         <h2>Known Issues</h2>
         <p>
           <ul>
+            <li>Occasional issues capturing footnotes</li>
             <li>
               Translation of sentences across pages does not work well yet; make
               sure to check sentences which continue across multiple pages

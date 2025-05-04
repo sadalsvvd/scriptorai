@@ -28,3 +28,14 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Global box-sizing and overflow fix */
+:root, html, body {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}

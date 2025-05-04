@@ -88,6 +88,13 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
   const [translationText, setTranslationText] = useState("");
   const [goToPage, setGoToPage] = useState("");
   const goToInputRef = useRef(null);
+  const [twoPane, setTwoPane] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = window.localStorage.getItem("twoPaneView");
+      return stored === null ? true : stored === "true";
+    }
+    return true;
+  });
 
   useEffect(() => {
     fetch(transcription)
@@ -111,6 +118,12 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
       }
     }
   }, [leftView, rightView]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("twoPaneView", String(twoPane));
+    }
+  }, [twoPane]);
 
   // Helper to build link with current tab state
   function buildPageLink(pageId: string) {
@@ -248,113 +261,125 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
           title={`${pageTitle} - Scriptorai`}
           description="Scriptorai is an open source, community-oriented project which hosts first-pass, LLM-powered translations of public domain esoteric texts, seeking to make previously inaccessible texts browsable by human beings and real translators which can then be improved upon collaboratively."
         >
-          <div style={{ padding: 24 }}>
-            {/* Top navigation row with title/desc in center */}
+          <div className={styles.container}>
+            {/* Page title outside of navRow */}
+            <h2 className={styles.pageTitle}>
+              {props.route.customData.textName} - Page {pageInt} of{" "}
+              {pageCount - 1}
+            </h2>
+
+            {/* Top navigation row */}
             <div className={styles.navRow}>
-              <PrevButton
-                prevPageId={prevPageId}
-                buildPageLink={buildPageLink}
-              />
-              <div
-                style={{
-                  paddingLeft: 50,
-                  paddingRight: 50,
-                  textAlign: "center",
-                  flex: 1,
-                }}
-              >
-                <h2 style={{ fontWeight: "bold", fontSize: 18 }}>
-                  {props.route.customData.textName} - Page {pageInt} of{" "}
-                  {pageCount - 1}
-                </h2>
-                <p>
-                  PLEASE NOTE: This text was originally transcribed and
-                  translated with LLMs, provided as a starting point. There are
-                  likely to be errors. You can submit corrections with the
-                  "Suggest Corrections" button in the transcription and
-                  translation views.
-                </p>
+              <div className={styles.navButtonsRow}>
+                <PrevButton
+                  prevPageId={prevPageId}
+                  buildPageLink={buildPageLink}
+                />
+
+                <NextButton
+                  nextPageId={nextPageId}
+                  buildPageLink={buildPageLink}
+                />
               </div>
-              <NextButton
-                nextPageId={nextPageId}
-                buildPageLink={buildPageLink}
-              />
             </div>
+
             {/* Viewer panes */}
-            <div style={{ display: "flex", gap: 24 }}>
-              {[
-                { side: "left", view: leftView, setView: setLeftView },
-                { side: "right", view: rightView, setView: setRightView },
-              ].map(({ side, view, setView }) => (
-                <div
-                  key={side}
-                  style={{
-                    flex: 1,
-                    minWidth: 0,
-                    border: "1px solid #eee",
-                    borderRadius: 8,
-                    background: "#fff",
-                    boxShadow: "0 1px 4px #0001",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      gap: 8,
-                      padding: 8,
-                      borderBottom: "1px solid #eee",
-                      background: "#f5f5f5",
-                    }}
-                  >
+            <div className={styles.viewsContainer}>
+              <div className={styles.viewPane}>
+                <div className={styles.viewTabs}>
+                  {VIEW_TYPES.map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setLeftView(type)}
+                      className={`${styles.viewTab} ${
+                        leftView === type ? styles.viewTabActive : ""
+                      }`}
+                    >
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </button>
+                  ))}
+                </div>
+                <div className={styles.viewContent}>{renderPane(leftView)}</div>
+              </div>
+              {twoPane && (
+                <div className={styles.viewPane}>
+                  <div className={styles.viewTabs}>
                     {VIEW_TYPES.map((type) => (
                       <button
                         key={type}
-                        onClick={() => setView(type)}
-                        style={{
-                          fontWeight: view === type ? "bold" : "normal",
-                          background: view === type ? "#e0e0e0" : "transparent",
-                          border: "none",
-                          padding: "6px 12px",
-                          borderRadius: 4,
-                          cursor: "pointer",
-                        }}
+                        onClick={() => setRightView(type)}
+                        className={`${styles.viewTab} ${
+                          rightView === type ? styles.viewTabActive : ""
+                        }`}
                       >
                         {type.charAt(0).toUpperCase() + type.slice(1)}
                       </button>
                     ))}
                   </div>
-                  <div style={{ padding: 12 }}>{renderPane(view)}</div>
+                  <div className={styles.viewContent}>
+                    {renderPane(rightView)}
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
+
             {/* Bottom navigation row with extra margin */}
             <div className={`${styles.navRow} ${styles.navRowBelow}`}>
-              <PrevButton
-                prevPageId={prevPageId}
-                buildPageLink={buildPageLink}
-              />
-              <div
-                style={{
-                  flex: 1,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 12,
-                }}
-              >
+              <div className={styles.navButtonsRow}>
+                <PrevButton
+                  prevPageId={prevPageId}
+                  buildPageLink={buildPageLink}
+                />
+                {/* Desktop-only Go to page form */}
+                <div
+                  className={`${styles.pageSelector} ${styles.showOnDesktop}`}
+                >
+                  <form
+                    onSubmit={handleGoToPage}
+                    className={styles.pageSelectorForm}
+                  >
+                    <div className={styles.pageSelectorInputGroup}>
+                      <input
+                        ref={goToInputRef}
+                        type="number"
+                        min={1}
+                        max={pageCount}
+                        value={goToPage}
+                        onChange={(e) =>
+                          setGoToPage(e.target.value.replace(/[^\d]/g, ""))
+                        }
+                        placeholder={`Go to page`}
+                        className={styles.pageSelectorInput}
+                      />
+                      <button
+                        type="submit"
+                        className={styles.navButton}
+                        disabled={
+                          !goToPage ||
+                          Number(goToPage) < 1 ||
+                          Number(goToPage) > pageCount
+                        }
+                      >
+                        Go
+                      </button>
+                    </div>
+                    <div className={styles.pageSelectorHelp}>
+                      Pages from 0 to {pageCount - 1}.
+                    </div>
+                  </form>
+                </div>
+                <NextButton
+                  nextPageId={nextPageId}
+                  buildPageLink={buildPageLink}
+                />
+              </div>
+              {/* Mobile-only Go to page form */}
+              <div className={`${styles.pageSelector} ${styles.showOnMobile}`}>
                 <form
                   onSubmit={handleGoToPage}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
+                  className={styles.pageSelectorForm}
                 >
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 8 }}
-                  >
+                  <div className={styles.pageSelectorInputGroup}>
                     <input
                       ref={goToInputRef}
                       type="number"
@@ -364,20 +389,12 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
                       onChange={(e) =>
                         setGoToPage(e.target.value.replace(/[^\d]/g, ""))
                       }
-                      placeholder={`Go to page (1-${pageCount})`}
-                      style={{
-                        width: 140,
-                        padding: "10px 16px",
-                        border: "1.5px solid #bfc3ca",
-                        borderRadius: 6,
-                        fontSize: 18,
-                        marginRight: 4,
-                      }}
+                      placeholder={`Go to page`}
+                      className={styles.pageSelectorInput}
                     />
                     <button
                       type="submit"
                       className={styles.navButton}
-                      style={{ padding: "10px 24px", fontSize: 18 }}
                       disabled={
                         !goToPage ||
                         Number(goToPage) < 1 ||
@@ -387,20 +404,36 @@ export default function TextTranslationPage(props: TextTranslationPageProps) {
                       Go
                     </button>
                   </div>
-                  <div style={{ fontSize: 13, color: "#888", marginTop: 2 }}>
-                    Pages start at 0.
+                  <div className={styles.pageSelectorHelp}>
+                    Pages from 0 to {pageCount - 1}.
                   </div>
                 </form>
               </div>
-              <NextButton
-                nextPageId={nextPageId}
-                buildPageLink={buildPageLink}
-              />
             </div>
-            {/* Info line about keyboard navigation */}
-            <div className={styles.infoLine}>
+
+            {/* Info line about keyboard navigation, hidden on mobile */}
+            <div className={`${styles.infoLine} ${styles.hideOnMobile}`}>
               Tip: You can use the left and right arrow keys to navigate pages.
             </div>
+
+            {/* Two-pane view toggle */}
+            <div className={styles.twoPaneToggle}>
+              <input
+                id="twoPaneToggle"
+                type="checkbox"
+                checked={twoPane}
+                onChange={(e) => setTwoPane(e.target.checked)}
+              />
+              <label htmlFor="twoPaneToggle">Two-pane view</label>
+            </div>
+
+            {/* LLM warning moved to the bottom */}
+            <p className={styles.pageWarning}>
+              PLEASE NOTE: This text was originally transcribed and translated
+              with LLMs, provided as a starting point. There are likely to be
+              errors. You can submit corrections with the "Suggest Corrections"
+              button in the transcription and translation views.
+            </p>
           </div>
         </Layout>
       )}

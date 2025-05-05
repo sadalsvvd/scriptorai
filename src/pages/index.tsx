@@ -208,20 +208,18 @@ export default function Home(): ReactNode {
           . It is also licensed under the MIT license.
         </p>
         <h2>Known Issues</h2>
-        <p>
-          <ul>
-            <li>Occasional issues capturing footnotes</li>
-            <li>
-              Translation of sentences across pages does not work well yet; make
-              sure to check sentences which continue across multiple pages
-            </li>
-            <li>
-              Certain numerical values may be transliterated incorrectly, such
-              as years and months being changed to incorrect decimal year
-              values. Check these values carefully.
-            </li>
-          </ul>
-        </p>
+        <ul>
+          <li>Occasional issues capturing footnotes</li>
+          <li>
+            Translation of sentences across pages does not work well yet; make
+            sure to check sentences which continue across multiple pages
+          </li>
+          <li>
+            Certain numerical values may be transliterated incorrectly, such as
+            years and months being changed to incorrect decimal year values.
+            Check these values carefully.
+          </li>
+        </ul>
         <h2>Contact</h2>
         <p>
           If you have any questions or feedback, you can email me at{" "}

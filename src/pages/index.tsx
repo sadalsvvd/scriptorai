@@ -80,7 +80,7 @@ export default function Home(): ReactNode {
           important modern survey of Greek astrological writing. Currently, due
           to cost, only the first volume has been translated.
         </p>
-        <ReadCCAGCallout href="/texts/CCAG_1/0001" />
+        <ReadCCAGCallout href="/texts/CCAG_01/0001" />
         <h3>Why AI translation?</h3>
         <p>
           AI translation (with{" "}

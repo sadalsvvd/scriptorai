@@ -122,7 +122,7 @@ const config: Config = {
       items: [
         {
           label: "CCAG Volume 1",
-          to: "/texts/CCAG_1/0001",
+          to: "/texts/CCAG_01/0001",
           position: "left",
         },
         {

@@ -6,9 +6,9 @@ import lunr from "lunr";
 // Available texts (expandable in the future)
 const AVAILABLE_TEXTS = [
   {
-    slug: "CCAG_1",
+    slug: "CCAG_01",
     label: "CCAG 1",
-    indexPath: "/texts_indices/CCAG_1.json",
+    indexPath: "/texts_indices/CCAG_01.json",
   },
   // Add more texts here as needed
 ];
